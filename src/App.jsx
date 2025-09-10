@@ -9,7 +9,7 @@ import useLocalStorage from "./hooks/useLocalStorage";
 import ProductList from "./components/ProductList";
 import CatalogHeader from "./components/CatalogHeader";
 import FilterPanel from "./components/FilterPanel";
-import Spinnner from "./components/Spinner/Spinner.jsx";
+import Spinner from "./components/Spinner";
 
 const initialSettings = {
   categories: [],
@@ -127,7 +127,7 @@ function App() {
       />
 
       {isLoading ? (
-        <Spinnner />
+        <Spinner />
       ) : (
         <main className={styles.main}>
           <CatalogHeader
