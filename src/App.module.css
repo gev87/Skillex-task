@@ -1,0 +1,29 @@
+.container {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 16px;
+  padding: 16px;
+}
+
+.loading {
+   grid-template-columns: 1fr;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+
+@media (max-width: 900px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+  .mobileBar {
+    display: flex;
+  }
+}
+
+
+

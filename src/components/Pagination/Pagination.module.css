@@ -1,0 +1,35 @@
+.pagination {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 0;
+}
+.pagination button {
+  padding: 6px 10px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 200ms ease, color 200ms ease,
+    border-color 200ms ease;
+}
+.pagination button:hover:not(:disabled):not(.activePage) {
+  background: #f3f4f6; 
+  border-color: #d1d5db;
+}
+
+.pagination button.activePage {
+  background: #3b82f6;
+  color: #fff;
+  border-color: #3b82f6;
+}
+
+.pagination button.activePage:hover {
+  background: #2563eb; 
+  border-color: #2563eb;
+}
+
+.pagination button:disabled {
+  cursor: not-allowed;
+}

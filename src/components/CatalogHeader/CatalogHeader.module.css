@@ -1,0 +1,47 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.toolbar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.mobileBar {
+  display: none;
+  gap: 8px;
+}
+
+.btn {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  cursor: pointer;
+}
+
+@media (max-width: 900px) {
+  .mobileBar {
+    display: flex;
+  }
+}
+
+@media (max-width: 460px) {
+  .header {
+    flex-direction: column;
+    gap:6px
+  }
+
+  .toolbar {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  h1 {
+    margin-top: 15px;
+  }
+}
