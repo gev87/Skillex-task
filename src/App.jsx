@@ -4,12 +4,12 @@ import styles from "./App.module.css";
 import { ITEMS_PER_PAGE, PRODUCTS_DATA, SETTINGS_KEY } from "./constants";
 import { applyFilters, getAvailableFilters, isEmptyObject, sortProducts } from "./helpers";
 
-import FilterPanel from "./components/FilterPanel";
-import Spinner from "./components/Spinner";
 import Pagination from "./components/Pagination";
 import useLocalStorage from "./hooks/useLocalStorage";
 import ProductList from "./components/ProductList";
 import CatalogHeader from "./components/CatalogHeader";
+import FilterPanel from "./components/FilterPanel";
+import Spinnner from "./components/Spinner";
 
 const initialSettings = {
   categories: [],
@@ -103,7 +103,7 @@ function App() {
        }, 600);
   }
 
-  
+
   useEffect(() => {
     const t = setTimeout(() => {
       setProducts(PRODUCTS_DATA);
@@ -127,7 +127,7 @@ function App() {
       />
 
       {isLoading ? (
-        <Spinner />
+        <Spinnner />
       ) : (
         <main className={styles.main}>
           <CatalogHeader
