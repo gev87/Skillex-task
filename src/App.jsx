@@ -20,6 +20,7 @@ const initialSettings = {
   search: "",
 };
 
+
 function App() {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
