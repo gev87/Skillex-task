@@ -103,6 +103,7 @@ function App() {
        }, 600);
   }
 
+  
   useEffect(() => {
     const t = setTimeout(() => {
       setProducts(PRODUCTS_DATA);
