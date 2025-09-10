@@ -9,7 +9,7 @@ import useLocalStorage from "./hooks/useLocalStorage";
 import ProductList from "./components/ProductList";
 import CatalogHeader from "./components/CatalogHeader";
 import FilterPanel from "./components/FilterPanel";
-import Spinnner from "./components/Spinner";
+import Spinnner from "./components/Spinner/Spinner.jsx";
 
 const initialSettings = {
   categories: [],
