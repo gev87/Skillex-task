@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import styles from "./App.module.css";
 
-import { ITEMS_PER_PAGE, PRODUCTS_DATA, SETTINGS_KEY } from "./constants";
+import { ITEMS_PER_PAGE, SETTINGS_KEY } from "./constants";
 import {
   applyFilters,
+  delay,
   getAvailableFilters,
   isEmptyObject,
   sortProducts,
@@ -40,17 +41,6 @@ function App() {
 
   const timerRef = useRef(null);
 
-  const selectedOptions = useMemo(
-    () => ({
-      categories: settings.categories,
-      brands: settings.brands,
-      minPrice: settings.minPrice,
-      maxPrice: settings.maxPrice,
-      minRating: settings.minRating,
-      search: settings.search,
-    }),
-    [settings]
-  );
   const sortBy = settings.sortBy;
 
   const availableOptions = useMemo(
@@ -64,8 +54,8 @@ function App() {
   );
 
   const filteredProducts = useMemo(
-    () => applyFilters(sortedProducts, selectedOptions),
-    [sortedProducts, selectedOptions]
+    () => applyFilters(sortedProducts, settings),
+    [sortedProducts, settings]
   );
 
   const totalPages = Math.max(
@@ -109,13 +99,26 @@ function App() {
     runWithSpinner(() => setPage(page));
   };
 
+
   useEffect(() => {
-    const t = setTimeout(() => {
-      setProducts(PRODUCTS_DATA);
-      setIsLoading(false);
-    }, 600);
-    return () => clearTimeout(t);
-  },[]);
+    async function getInitialData(){
+      try {
+        await delay(600); 
+        const res = await fetch(`${import.meta.env.BASE_URL}products.json`, {
+          headers: { Accept: "application/json" },
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        setProducts(Array.isArray(data) ? data : []);
+      } catch (err) {
+        console.error("[App] Failed to fetch products:", err);
+        setProducts([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    getInitialData();
+  }, []);
   
   useEffect(() => {
     return () => {
@@ -131,29 +134,30 @@ function App() {
     >
       <FilterPanel
         availableOptions={availableOptions}
-        selectedOptions={selectedOptions}
+        selectedOptions={settings}
         onSelectedOptionsChange={handleSelectedOptionsChange}
         isOpen={isFilterPanelOpen}
         onClose={() => setIsFilterPanelOpen(false)}
       />
-
-      {isLoading ? (
-        <Spinner />
-      ) : (
-        <main className={styles.main}>
-          <CatalogHeader
-            sortBy={sortBy}
-            onSort={handleSort}
-            toggleFilterPanel={() => setIsFilterPanelOpen((open) => !open)}
-          />
-          <ProductList products={paged} />
-          <Pagination
-            page={pageSafe}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-          />
-        </main>
-      )}
+      <main className={styles.main}>
+        <CatalogHeader
+          sortBy={sortBy}
+          onSort={handleSort}
+          toggleFilterPanel={() => setIsFilterPanelOpen((open) => !open)}
+        />
+        {isLoading ? (
+          <Spinner />
+        ) : (
+          <>
+            <ProductList products={paged} />
+            <Pagination
+              page={pageSafe}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          </>
+        )}
+      </main>
     </div>
   );
 }

@@ -145,6 +145,8 @@ export default function FilterPanel({
           <input
             type="number"
             value={minPrice}
+            min={availableOptions.minPrice}
+            max={availableOptions.maxPrice}
             onChange={(e) => setMinPrice(e.target.value)}
             className={styles.input}
           />
@@ -152,6 +154,8 @@ export default function FilterPanel({
           <input
             type="number"
             value={maxPrice}
+            min={availableOptions.minPrice}
+            max={availableOptions.maxPrice}
             onChange={(e) => setMaxPrice(e.target.value)}
             className={styles.input}
           />

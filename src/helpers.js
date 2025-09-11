@@ -1,3 +1,5 @@
+import { SORT } from "./constants";
+
 export function getAvailableFilters(products) {
   if (!products || products.length === 0) {
     return { categories: [], brands: [], minPrice: 0, maxPrice: 0 };
@@ -52,22 +54,26 @@ export function applyFilters(products, options = {}) {
 export function sortProducts(products, sortBy) {
   const arr = [...products];
   switch (sortBy) {
-    case "priceAsc":
+    case SORT.PRICE_ASC:
       return arr.sort((a, b) => a.price - b.price);
-    case "priceDesc":
+    case SORT.PRICE_DESC:
       return arr.sort((a, b) => b.price - a.price);
-    case "ratingAcs":
+    case SORT.RATING_ASC:
+      return arr.sort((a, b) => a.rating - b.rating);
+    case SORT.RATING_DESC:
       return arr.sort((a, b) => b.rating - a.rating);
-    case "ratingDesc":
-      return arr.sort((a, b) => b.rating - a.rating);
-    case "nameAsc":
+    case SORT.NAME_ASC:
       return arr.sort((a, b) => a.name.localeCompare(b.name));
-    case "default":
+    case SORT.DEFAULT:
     default:
-      return arr; 
+      return arr;
   }
 }
 
 export function isEmptyObject(obj) {
   return Object.keys(obj).length === 0;
 }
+
+export function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+} 
