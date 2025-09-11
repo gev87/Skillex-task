@@ -64,7 +64,7 @@ export function sortProducts(products, sortBy) {
       return arr.sort((a, b) => a.name.localeCompare(b.name));
     case "default":
     default:
-      return arr; // leave order as-is
+      return arr; 
   }
 }
 

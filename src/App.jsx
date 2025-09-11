@@ -1,8 +1,13 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import styles from "./App.module.css";
 
 import { ITEMS_PER_PAGE, PRODUCTS_DATA, SETTINGS_KEY } from "./constants";
-import { applyFilters, getAvailableFilters, isEmptyObject, sortProducts } from "./helpers";
+import {
+  applyFilters,
+  getAvailableFilters,
+  isEmptyObject,
+  sortProducts,
+} from "./helpers";
 
 import Pagination from "./components/Pagination";
 import useLocalStorage from "./hooks/useLocalStorage";
@@ -20,7 +25,6 @@ const initialSettings = {
   search: "",
 };
 
-
 function App() {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -33,6 +37,8 @@ function App() {
     ...initialSettings,
     sortBy: "default",
   });
+
+  const timerRef = useRef(null);
 
   const selectedOptions = useMemo(
     () => ({
@@ -72,38 +78,36 @@ function App() {
     return filteredProducts.slice(start, start + ITEMS_PER_PAGE);
   }, [filteredProducts, pageSafe]);
 
+  const runWithSpinner = useCallback((run) => {
+    if (timerRef.current) clearTimeout(timerRef.current);
+    setIsLoading(true);
+    run();
+    timerRef.current = setTimeout(() => setIsLoading(false), 600);
+  }, []);
+
   const handleSelectedOptionsChange = useCallback(
     (updatedFilters) => {
-      setIsLoading(true);
-      setTimeout(() => {
-        setSettings({ ...updatedFilters, sortBy });
+      runWithSpinner(() => {
+        setSettings({ ...updatedFilters, sortBy: settings.sortBy });
         setPage(1);
-        setIsLoading(false);
-      }, 600);
+      });
     },
-    [setSettings, sortBy]
+    [runWithSpinner, setSettings, settings.sortBy]
   );
 
   const handleSort = useCallback(
     (value) => {
-      setIsLoading(true);
-       setTimeout(() => {
-         setSettings({ ...selectedOptions, sortBy: value });
-         setPage(1);
-         setIsLoading(false);
-       }, 600);
+      runWithSpinner(() => {
+        setSettings((prev) => ({ ...prev, sortBy: value }));
+        setPage(1);
+      });
     },
-    [selectedOptions, setSettings]
+    [runWithSpinner, setSettings]
   );
 
   const handlePageChange = (page) => {
-       setIsLoading(true);
-       setTimeout(() => {
-         setPage(page);
-         setIsLoading(false);
-       }, 600);
-  }
-
+    runWithSpinner(() => setPage(page));
+  };
 
   useEffect(() => {
     const t = setTimeout(() => {
@@ -111,6 +115,12 @@ function App() {
       setIsLoading(false);
     }, 600);
     return () => clearTimeout(t);
+  },[]);
+  
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
   }, []);
 
   return (

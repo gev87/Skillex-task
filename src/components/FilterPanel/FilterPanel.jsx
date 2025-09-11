@@ -185,7 +185,11 @@ export default function FilterPanel({
       </div>
 
       <div className={styles.footer}>
-        <button className={styles.resetBtn} onClick={handleResetFilters}>
+        <button
+          className={styles.resetBtn}
+          onClick={handleResetFilters}
+          aria-label="Reset filters"
+        >
           Reset filters
         </button>
       </div>
